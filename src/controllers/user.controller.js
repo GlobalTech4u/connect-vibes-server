@@ -5,6 +5,64 @@ import Picture from "../models/picture.model.js";
 import Follower from "../models/follower.model.js";
 import { API_RESPONSES } from "../constants/api.constants.js";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management
+ */
+
+/**
+ * @swagger
+ * /api/users/search/{searchQuery}:
+ *   get:
+ *     summary: Search for users by query
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: searchQuery
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The search query to filter users by first name, last name, or email
+ *     responses:
+ *       200:
+ *         description: A list of users matching the search query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Search successful"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 users:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while searching for users."
+ */
+
 const getUsersBySearch = async (req, res) => {
   const searchQuery = req?.params?.searchQuery;
 
@@ -62,6 +120,50 @@ const getUsersBySearch = async (req, res) => {
     );
 };
 
+/**
+ * @swagger
+ * /api/users/:
+ *   get:
+ *     summary: Retrieve a list of users
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Got users"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 users:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving users."
+ */
+
 const getAllUsers = async (req, res) => {
   return await User?.find({})
     .then(async (users) => {
@@ -105,6 +207,55 @@ const getAllUsers = async (req, res) => {
     );
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to retrieve
+ *     responses:
+ *       200:
+ *         description: User retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "User retrieved successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving the user."
+ */
+
 const getUserById = async (req, res) => {
   const userId = req?.params?.userId;
   Promise.all([
@@ -140,6 +291,57 @@ const getUserById = async (req, res) => {
       })
     );
 };
+
+/**
+ * @swagger
+ * /api/users/{userId}/followers:
+ *   get:
+ *     summary: Get followers of a user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to get followers for
+ *     responses:
+ *       200:
+ *         description: Followers retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 followers:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Followers retrieved successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 followers:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving followers."
+ */
 
 const getFollowers = async (req, res) => {
   const userId = req.params.userId;
@@ -182,6 +384,57 @@ const getFollowers = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}/followings:
+ *   get:
+ *     summary: Get followings of a user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to get followings for
+ *     responses:
+ *       200:
+ *         description: Followings retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 followings:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Followings retrieved successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 followings:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving followings."
+ */
+
 const getFollowings = async (req, res) => {
   const userId = req.params.userId;
 
@@ -222,6 +475,68 @@ const getFollowings = async (req, res) => {
     });
   }
 };
+
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Add a new user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               gender:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               profileImage:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "User created successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while creating the user."
+ */
 
 const addUser = async (req, res) => {
   const body = req?.body;
@@ -278,6 +593,89 @@ const addUser = async (req, res) => {
     );
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}:
+ *   put:
+ *     summary: Update user by ID
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               gender:
+ *                 type: string
+ *               jobTitle:
+ *                 type: string
+ *               relationshipStatus:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               phone:
+ *                 type: object
+ *                 properties:
+ *                   areaCode:
+ *                     type: string
+ *                   number:
+ *                     type: string
+ *               aboutMe:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "User updated successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while updating the user."
+ */
+
 const updateUserById = async (req, res) => {
   const { userId } = req?.params;
   const body = req?.body;
@@ -313,6 +711,65 @@ const updateUserById = async (req, res) => {
     );
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}/follow:
+ *   put:
+ *     summary: Follow a user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user who is following
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: The ID of the user to follow
+ *     responses:
+ *       200:
+ *         description: User followed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 follower:
+ *                   $ref: '#/components/schemas/Follower'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "User followed successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while following the user."
+ */
+
 const followUser = async (req, res) => {
   const userId = req?.params?.userId;
   const userIdToFollow = req?.body?.userId;
@@ -336,6 +793,65 @@ const followUser = async (req, res) => {
       })
     );
 };
+
+/**
+ * @swagger
+ * /api/users/{userId}/unfollow:
+ *   put:
+ *     summary: Unfollow a user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user who is unfollowing
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: The ID of the user to unfollow
+ *     responses:
+ *       200:
+ *         description: User unfollowed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "User unfollowed successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while unfollowing the user."
+ */
 
 const unfollowUser = async (req, res) => {
   const userId = req?.params?.userId;

@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "__v": { "type": "integer" },
+    "_id": { "type": "string" },
+    "attachment": {
+      "type": "object",
+      "properties": {
+        "encoding": { "type": "string" },
+        "fieldname": { "type": "string" },
+        "filename": { "type": "string" },
+        "mimetype": { "type": "string" },
+        "originalname": { "type": "string" },
+        "path": { "type": "string" },
+        "size": { "type": "integer" }
+      }
+    },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "postId": { "type": "string" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  }
+}

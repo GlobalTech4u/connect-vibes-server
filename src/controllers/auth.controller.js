@@ -6,6 +6,59 @@ import Picture from "../models/picture.model.js";
 import { generateToken } from "../helpers/jwt.helper.js";
 import { API_RESPONSES } from "../constants/api.constants.js";
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Login successful"
+ *       400:
+ *         description: Invalid credentials or internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid credentials"
+ */
+
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 

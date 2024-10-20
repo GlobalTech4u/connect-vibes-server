@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "__v": { "type": "integer" },
+    "_id": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "postId": { "type": "string" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "userId": { "type": "string" }
+  }
+}
