@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "__v": { "type": "integer" },
+    "_id": { "type": "string" },
+    "aboutMe": { "type": "string" },
+    "city": { "type": "string" },
+    "country": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "email": { "type": "string", "format": "email" },
+    "firstName": { "type": "string" },
+    "followers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Follower"
+      }
+    },
+    "followings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Follower"
+      }
+    },
+    "gender": { "type": "string" },
+    "jobTitle": { "type": "string" },
+    "lastName": { "type": "string" },
+    "password": { "type": "string" },
+    "phone": {
+      "type": "object",
+      "properties": {
+        "areaCode": { "type": "string" },
+        "number": { "type": "string" }
+      }
+    },
+    "profilePictures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Picture"
+      }
+    },
+    "relationshipStatus": { "type": "string" },
+    "state": { "type": "string" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  }
+}

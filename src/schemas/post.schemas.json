@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "__v": { "type": "integer" },
+    "_id": { "type": "string" },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Attachment"
+      }
+    },
+    "content": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "firstName": { "type": "string" },
+    "lastName": { "type": "string" },
+    "likes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/components/schemas/Like"
+      }
+    },
+    "profilePicture": {
+      "$ref": "#/components/schemas/Picture"
+    },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "userId": { "type": "string" }
+  }
+}

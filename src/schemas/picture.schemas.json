@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "__v": { "type": "integer" },
+    "_id": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "encoding": { "type": "string" },
+        "fieldname": { "type": "string" },
+        "filename": { "type": "string" },
+        "mimetype": { "type": "string" },
+        "originalname": { "type": "string" },
+        "path": { "type": "string" },
+        "size": { "type": "integer" }
+      }
+    },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "userId": { "type": "string" }
+  }
+}

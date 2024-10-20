@@ -6,6 +6,57 @@ import Picture from "../models/picture.model.js";
 import Like from "../models/like.model.js";
 import { API_RESPONSES } from "../constants/api.constants.js";
 
+/**
+ * @swagger
+ * /api/users/{userId}/posts:
+ *   get:
+ *     summary: Get all posts by a user
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to get posts for
+ *     responses:
+ *       200:
+ *         description: Posts retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Post'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Posts retrieved successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving posts."
+ */
+
 const getAllUserPosts = async (req, res) => {
   const userId = req.params.userId;
 
@@ -50,6 +101,61 @@ const getAllUserPosts = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}/posts/{postId}/like:
+ *   post:
+ *     summary: Like a post
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user liking the post
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post to like
+ *     responses:
+ *       201:
+ *         description: Post liked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 like:
+ *                   $ref: '#/components/schemas/Like'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Post liked successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while liking the post."
+ */
+
 const likePost = async (req, res) => {
   const { userId, postId } = req?.params;
 
@@ -73,6 +179,61 @@ const likePost = async (req, res) => {
     );
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}/posts/{postId}/unlike:
+ *   post:
+ *     summary: Unlike a post
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user unliking the post
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post to unlike
+ *     responses:
+ *       204:
+ *         description: Post unliked successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 like:
+ *                   $ref: '#/components/schemas/Like'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Post unliked successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while unliking the post."
+ */
+
 const unlikePost = async (req, res) => {
   const { userId, postId } = req?.params;
 
@@ -95,6 +256,61 @@ const unlikePost = async (req, res) => {
       })
     );
 };
+
+/**
+ * @swagger
+ * /api/users/{userId}/posts/{postId}:
+ *   get:
+ *     summary: Get post by ID
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user who owns the post
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post to retrieve
+ *     responses:
+ *       200:
+ *         description: Post retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   $ref: '#/components/schemas/Post'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Post retrieved successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving the post."
+ */
 
 const getPostByPostId = async (req, res) => {
   const { userId, postId } = req?.params;
@@ -127,6 +343,57 @@ const getPostByPostId = async (req, res) => {
     });
   }
 };
+
+/**
+ * @swagger
+ * /api/users/{userId}/posts/newsfeed:
+ *   get:
+ *     summary: Get latest posts for feeds
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user to get feeds for
+ *     responses:
+ *       200:
+ *         description: Feeds retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Post'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Feeds retrieved successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 posts:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while retrieving feeds."
+ */
 
 const getLatestPostForFeeds = async (req, res) => {
   const userId = req?.params?.userId;
@@ -176,6 +443,61 @@ const getLatestPostForFeeds = async (req, res) => {
     });
   }
 };
+
+/**
+ * @swagger
+ * /api/users/{userId}/posts/{postId}/share:
+ *   post:
+ *     summary: Share a post
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user sharing the post
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post to share
+ *     responses:
+ *       201:
+ *         description: Post shared successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   $ref: '#/components/schemas/Post'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Post shared successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while sharing the post."
+ */
 
 const sharePost = async (req, res) => {
   const { userId, postId } = req.params;
@@ -243,6 +565,69 @@ const sharePost = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/users/{userId}/posts:
+ *   post:
+ *     summary: Add a new post
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user adding the post
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *               postAttachments:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       201:
+ *         description: Post created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   $ref: '#/components/schemas/Post'
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Post created successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while creating the post."
+ */
+
 const addPost = async (req, res) => {
   const { content } = req.body;
   const { userId } = req.params;
@@ -304,6 +689,62 @@ const addPost = async (req, res) => {
     });
   }
 };
+
+/**
+ * @swagger
+ * /api/users/{userId}/posts/{postId}:
+ *   delete:
+ *     summary: Delete a post
+ *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the user who owns the post
+ *       - in: path
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post to delete
+ *     responses:
+ *       204:
+ *         description: Post deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: string
+ *                   example: "Post ID"
+ *                 error:
+ *                   type: string
+ *                   example: null
+ *                 message:
+ *                   type: string
+ *                   example: "Post deleted successfully"
+ *       400:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 post:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred while deleting the post."
+ */
 
 const deletePost = async (req, res) => {
   const { userId, postId } = req.params;
