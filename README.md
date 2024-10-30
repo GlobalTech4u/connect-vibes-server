@@ -34,3 +34,19 @@ npm run start:local
 
 // Build react-app locally
 npm run build:local
+
+## Swagger Documentation
+
+Accessing Swagger Documentation
+To view the Swagger documentation for the SocialMediaFeeds (SMF) application:
+
+1.  Run the Server: Ensure the server is running.
+2.  Visit the Documentation: Open your browser and navigate to http://localhost:8080/api-docs/.
+
+Authorizing with Swagger
+To authorize and access protected endpoints:
+
+1.  Run the Swagger UI App: Ensure the Swagger UI is running.
+2.  Open Local Storage: In your browser's developer tools, navigate to the local storage.
+3.  Locate the User Token: Find the user object and copy the value of the token.
+4.  Authorize: Click the "Authorize" button in the Swagger UI and paste the token string
