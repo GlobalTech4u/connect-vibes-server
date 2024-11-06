@@ -39,7 +39,7 @@ import { API_RESPONSES } from "../constants/api.constants.js";
  *                 message:
  *                   type: string
  *                   example: "Posts retrieved successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -93,7 +93,7 @@ const getAllUserPosts = async (req, res) => {
       message: API_RESPONSES.GET_POSTS_SUCCESS,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       posts: null,
       error: error.message,
       message: API_RESPONSES.GET_POSTS_UNSUCCESS,
@@ -138,7 +138,7 @@ const getAllUserPosts = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Post liked successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -171,7 +171,7 @@ const likePost = async (req, res) => {
       })
     )
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         post: null,
         error: error,
         message: API_RESPONSES.LIKE_POST_UNSUCCESS,
@@ -216,7 +216,7 @@ const likePost = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Post unliked successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -249,7 +249,7 @@ const unlikePost = async (req, res) => {
       })
     )
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         post: null,
         error: error,
         message: API_RESPONSES.UNLIKE_POST_UNSUCCESS,
@@ -294,7 +294,7 @@ const unlikePost = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Post retrieved successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -336,7 +336,7 @@ const getPostByPostId = async (req, res) => {
       message: API_RESPONSES.GET_POST_SUCCESS,
     });
   } catch (error) {
-    res?.status(400)?.json({
+    res?.status(500)?.json({
       post: null,
       error: error,
       message: API_RESPONSES.GET_POST_UNSUCCESS,
@@ -377,7 +377,7 @@ const getPostByPostId = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Feeds retrieved successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -436,7 +436,7 @@ const getLatestPostForFeeds = async (req, res) => {
       message: API_RESPONSES.GET_FEEDS_SUCCESS,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       posts: null,
       error: error.message,
       message: API_RESPONSES.GET_FEEDS_UNSUCCESS,
@@ -481,7 +481,7 @@ const getLatestPostForFeeds = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Post shared successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -557,7 +557,7 @@ const sharePost = async (req, res) => {
     // Rollback the transaction in case of error
     await session.abortTransaction();
     session.endSession();
-    return res.status(400).json({
+    return res.status(500).json({
       post: null,
       error: error.message,
       msg: API_RESPONSES.ADD_POST_UNSUCCESS,
@@ -610,7 +610,7 @@ const sharePost = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Post created successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -675,14 +675,14 @@ const addPost = async (req, res) => {
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(400).json({
+      return res.status(500).json({
         post: null,
         error: error.message,
         msg: API_RESPONSES.UPLOAD_ATTACHMENTS_UNSUCCESS,
       });
     }
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       post: null,
       error: error.message,
       msg: API_RESPONSES.ADD_POST_UNSUCCESS,
@@ -728,7 +728,7 @@ const addPost = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Post deleted successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -767,18 +767,14 @@ const deletePost = async (req, res) => {
     ) {
       await session.commitTransaction();
       session.endSession();
-      return res.status(204).json({
-        post: postId,
-        error: null,
-        msg: API_RESPONSES.DELETE_POST_SUCCESS,
-      });
+      return res.status(204).json();
     } else {
       throw new Error(API_RESPONSES.DELETE_POST_UNSUCCESS);
     }
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    return res.status(400).json({
+    return res.status(500).json({
       post: null,
       error: error.message,
       msg: API_RESPONSES.DELETE_POST_UNSUCCESS,

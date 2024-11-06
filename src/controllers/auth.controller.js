@@ -34,7 +34,26 @@ import { API_RESPONSES } from "../constants/api.constants.js";
  *               type: object
  *               properties:
  *                 user:
- *                   $ref: '#/components/schemas/User'
+ *                   allOf:
+ *                     - $ref: '#/components/schemas/User'
+ *                   type: object
+ *                   properties:
+ *                     profilePictures:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                     followers:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                     followings:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                     token:
+ *                       type: string
+ *                     refreshToken:
+ *                       type: string
  *                 error:
  *                   type: string
  *                   example: null
@@ -80,7 +99,7 @@ const loginUser = async (req, res) => {
       message: API_RESPONSES.INVALID_CREDENTIALS,
     });
 
-  const token = generateToken(user?.id);
+  const { accessToken, refreshToken } = generateToken(user?.id);
 
   Promise.all([
     Follower?.find({ userId: user?._id }),
@@ -92,12 +111,15 @@ const loginUser = async (req, res) => {
       const followers = result[1];
       const pictures = result[2];
 
+      const { password, ...userWithoutPassword } = user.toObject();
+
       const currentUser = {
-        ...user.toObject(),
+        ...userWithoutPassword,
         profilePictures: pictures,
         followers: followers,
         followings: followings,
-        token: token,
+        token: accessToken,
+        refreshToken: refreshToken,
       };
 
       return res?.status(200)?.json({

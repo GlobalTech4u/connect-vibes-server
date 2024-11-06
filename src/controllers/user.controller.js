@@ -45,7 +45,7 @@ import { API_RESPONSES } from "../constants/api.constants.js";
  *                 message:
  *                   type: string
  *                   example: "Search successful"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -82,17 +82,17 @@ const getUsersBySearch = async (req, res) => {
     .then(async (users) => {
       const allUsers = await Promise.all(
         users?.map(async (userdoc) => {
-          const user = userdoc?.toObject();
+          const { password, ...userWithoutPassword } = userdoc?.toObject();
           let currentUser;
           try {
             const [followings, followers, pictures] = await Promise.all([
-              Follower?.find({ userId: user?._id }),
-              Follower?.find({ followerId: user?._id }),
-              Picture?.find({ userId: user?._id }),
+              Follower?.find({ userId: userWithoutPassword?._id }),
+              Follower?.find({ followerId: userWithoutPassword?._id }),
+              Picture?.find({ userId: userWithoutPassword?._id }),
             ]);
 
             currentUser = {
-              ...user,
+              ...userWithoutPassword,
               profilePictures: pictures,
               followers: followers,
               followings: followings,
@@ -112,7 +112,7 @@ const getUsersBySearch = async (req, res) => {
       });
     })
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         users: null,
         error: error,
         message: API_RESPONSES.SEARCH_USERS_UNSUCCESS,
@@ -146,7 +146,7 @@ const getUsersBySearch = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Got users"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -169,17 +169,17 @@ const getAllUsers = async (req, res) => {
     .then(async (users) => {
       const allUsers = await Promise.all(
         users?.map(async (userdoc) => {
-          const user = userdoc?.toObject();
+          const { password, ...userWithoutPassword } = userdoc?.toObject();
           let currentUser;
           try {
             const [followings, followers, pictures] = await Promise.all([
-              Follower?.find({ userId: user?._id }),
-              Follower?.find({ followerId: user?._id }),
-              Picture?.find({ userId: user?._id }),
+              Follower?.find({ userId: userWithoutPassword?._id }),
+              Follower?.find({ followerId: userWithoutPassword?._id }),
+              Picture?.find({ userId: userWithoutPassword?._id }),
             ]);
 
             currentUser = {
-              ...user,
+              ...userWithoutPassword,
               profilePictures: pictures,
               followers: followers,
               followings: followings,
@@ -199,7 +199,7 @@ const getAllUsers = async (req, res) => {
       });
     })
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         users: null,
         error: error,
         message: API_RESPONSES.GET_USERS_UNSUCCESS,
@@ -238,7 +238,7 @@ const getAllUsers = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "User retrieved successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -268,10 +268,10 @@ const getUserById = async (req, res) => {
       const followings = result[0];
       const followers = result[1];
       const pictures = result[2];
-      const user = result[3]?.toObject();
+      const { password, ...userWithoutPassword } = result[3]?.toObject();
 
       const currentUser = {
-        ...user,
+        ...userWithoutPassword,
         profilePictures: pictures,
         followers: followers,
         followings: followings,
@@ -284,7 +284,7 @@ const getUserById = async (req, res) => {
       });
     })
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         user: null,
         error: error,
         message: API_RESPONSES.GET_USER_UNSUCCESS,
@@ -325,7 +325,7 @@ const getUserById = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Followers retrieved successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -356,9 +356,11 @@ const getFollowers = async (req, res) => {
           User.findById(follower.userId),
         ]);
 
+        const { password, ...userWithoutPassword } = user.toObject();
+
         if (user) {
           return {
-            ...user.toObject(),
+            ...userWithoutPassword,
             profilePicture: pictures,
           };
         }
@@ -376,7 +378,7 @@ const getFollowers = async (req, res) => {
       message: API_RESPONSES.GET_FOLLOWERS_SUCCESS,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       user: null,
       error: error.message,
       message: API_RESPONSES.GET_FOLLOWERS_UNSUCCESS,
@@ -417,7 +419,7 @@ const getFollowers = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "Followings retrieved successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -448,9 +450,11 @@ const getFollowings = async (req, res) => {
           User.findById(follower.followerId),
         ]);
 
+        const { password, ...userWithoutPassword } = user.toObject();
+
         if (user) {
           return {
-            ...user.toObject(),
+            ...userWithoutPassword,
             profilePicture: pictures,
           };
         }
@@ -468,7 +472,7 @@ const getFollowings = async (req, res) => {
       message: API_RESPONSES.GET_FOLLOWINGS_SUCCESS,
     });
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       user: null,
       error: error.message,
       message: API_RESPONSES.GET_FOLLOWINGS_UNSUCCESS,
@@ -499,8 +503,6 @@ const getFollowings = async (req, res) => {
  *                 type: string
  *               gender:
  *                 type: string
- *               password:
- *                 type: string
  *               profileImage:
  *                 type: string
  *                 format: binary
@@ -520,7 +522,7 @@ const getFollowings = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "User created successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -559,8 +561,9 @@ const addUser = async (req, res) => {
           userId: user?._id,
         })
           .then((picture) => {
+            const { password, ...userWithoutPassword } = user?.toObject();
             const createdUser = {
-              ...user?.toObject(),
+              ...userWithoutPassword,
               profilePictures: picture?.toObject(),
             };
             return res?.status(201)?.json({
@@ -570,7 +573,7 @@ const addUser = async (req, res) => {
             });
           })
           .catch((error) =>
-            res?.status(400)?.json({
+            res?.status(500)?.json({
               user: null,
               error: error,
               message: API_RESPONSES.ADD_PROFILE_PICTURE_UNSUCCESS,
@@ -585,7 +588,7 @@ const addUser = async (req, res) => {
       });
     })
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         user: null,
         error: error,
         message: API_RESPONSES.ADD_USER_UNSUCCESS,
@@ -658,7 +661,7 @@ const addUser = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "User updated successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -696,14 +699,15 @@ const updateUserById = async (req, res) => {
 
   User?.findByIdAndUpdate({ _id: userId }, user)
     .then((updatedUser) => {
+      const { password, ...userWithoutPassword } = updatedUser?.toObject();
       return res?.status(201)?.json({
-        user: updatedUser,
+        user: userWithoutPassword,
         error: null,
         message: API_RESPONSES.UPDATE_USER_SUCCESS,
       });
     })
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         user: null,
         error: error,
         message: API_RESPONSES.UPDATE_USER_UNSUCCESS,
@@ -752,7 +756,7 @@ const updateUserById = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "User followed successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -786,7 +790,7 @@ const followUser = async (req, res) => {
       })
     )
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         user: null,
         error: error,
         message: API_RESPONSES.FOLLOW_USER_UNSUCCESS,
@@ -835,7 +839,7 @@ const followUser = async (req, res) => {
  *                 message:
  *                   type: string
  *                   example: "User unfollowed successfully"
- *       400:
+ *       500:
  *         description: Internal Server Error
  *         content:
  *           application/json:
@@ -866,7 +870,7 @@ const unfollowUser = async (req, res) => {
       })
     )
     .catch((error) =>
-      res?.status(400)?.json({
+      res?.status(500)?.json({
         user: null,
         error: error,
         message: API_RESPONSES.UNFOLLOW_USER_UNSUCCESS,

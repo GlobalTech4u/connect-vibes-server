@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import http from "http";
 import swaggerUi from "swagger-ui-express";
+import logger from "./lib/logger.lib.js";
 
 import userRouter from "./routes/user.routes.js";
 import postRouter from "./routes/post.routes.js";
@@ -27,7 +28,7 @@ app.use(
   cors({
     origin: CLIENT_APP_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Refresh-Token"],
     credentials: true,
   })
 );
@@ -37,7 +38,7 @@ app.options(
   cors({
     origin: CLIENT_APP_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "Refresh-Token"],
   })
 );
 
@@ -54,7 +55,7 @@ app.get("*", (req, res) => {
 const httpServer = http.createServer(app);
 
 const server = httpServer.listen(PORT, () =>
-  console.log(`server started at port ${PORT}`)
+  logger.info(`server started at port ${PORT}`)
 );
 initializeMongoDB(MONGO_DB_URL, server);
 initializeSocket(CLIENT_APP_URL, server);

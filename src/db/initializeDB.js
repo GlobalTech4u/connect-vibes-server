@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "../lib/logger.lib.js";
 
 const initializeMongoDB = async (url, server) => {
   const options = {
@@ -8,10 +9,10 @@ const initializeMongoDB = async (url, server) => {
 
   return mongoose
     .connect(url, options)
-    .then(() => console.log("mongodb connected"))
+    .then(() => logger.info("mongodb connected"))
     .catch((error) => {
-      console.log("mongodb connection failed ", error);
-      server.close(() => console.log("server closed"));
+      logger.error("mongodb connection failed ", error);
+      server.close(() => logger.error("server closed"));
     });
 };
 
