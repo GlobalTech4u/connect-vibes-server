@@ -1,4 +1,5 @@
 import fs from "fs";
+import logger from "../lib/logger.lib.js";
 
 function logReqRes(fileName) {
   return (req, res, next) => {
@@ -9,7 +10,7 @@ function logReqRes(fileName) {
         if (err) {
           throw err;
         }
-        console.log("log created!");
+        logger.info("log created!");
         next();
       }
     );

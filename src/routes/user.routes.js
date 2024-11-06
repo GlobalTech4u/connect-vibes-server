@@ -11,7 +11,7 @@ import {
   getFollowers,
   getFollowings,
 } from "../controllers/user.controller.js";
-import { upload } from "../utils/multer.util.js";
+import { upload } from "../lib/multer.lib.js";
 import { PROFILE_PICTURE_FIELD } from "../constants/common.constants.js";
 
 const router = express.Router({ mergeParams: true });

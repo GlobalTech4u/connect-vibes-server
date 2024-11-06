@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import logger from "../lib/logger.lib.js";
 
 const initializeSocket = (CLIENT_APP_URL, server) => {
   const io = new Server(server, {
@@ -6,7 +7,7 @@ const initializeSocket = (CLIENT_APP_URL, server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log(`a user connected `, socket?.handshake?.query?.userId);
+    logger.info(`a user connected `, socket?.handshake?.query?.userId);
 
     if (
       socket?.handshake?.query?.userId &&

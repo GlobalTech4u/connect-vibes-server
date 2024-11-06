@@ -24,7 +24,6 @@
     "gender": { "type": "string" },
     "jobTitle": { "type": "string" },
     "lastName": { "type": "string" },
-    "password": { "type": "string" },
     "phone": {
       "type": "object",
       "properties": {
